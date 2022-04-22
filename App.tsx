@@ -1,6 +1,4 @@
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { StatusBar } from "expo-status-bar";
 import AppLoading from "expo-app-loading";
 
 import {
@@ -9,6 +7,10 @@ import {
   WorkSans_700Bold,
   WorkSans_500Medium,
 } from "@expo-google-fonts/work-sans";
+import Routes from "./src/routes";
+import { View } from "react-native";
+import { ThemeProvider } from "styled-components";
+import {theme} from "./src/theme";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -21,19 +23,10 @@ export default function App() {
     return <AppLoading />;
   }
 
+  //const themeActual = theme.colorsDark ? 
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-      <Text style={{ fontFamily: "WorkSans_600SemiBold", fontSize: 40 }}>
-        Inter Black
-      </Text>
-
-      <Text style={{ fontFamily: "WorkSans_500Medium", fontSize: 40 }}>
-        Inter Black
-      </Text>
-
-      <Text style={{ fontFamily: "WorkSans_700Bold", fontSize: 40 }}>
-        Inter Black
-      </Text>
-    </View>
+    <ThemeProvider theme={theme.dark}>
+      <Routes />
+    </ThemeProvider>
   );
 }
