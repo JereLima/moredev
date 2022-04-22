@@ -10,6 +10,7 @@ export default {
       text: "#85868A",
       text_dark:'#000',
       background: "#E5E5E5",
+      white: '#FFFF',
     },
     fonts: {
       medium: "WorkSans_500Medium",
@@ -22,12 +23,14 @@ export default {
             h1: RFValue(24),
             h2: RFValue(20),
             h3: RFValue(18),
-            paragraph:  RFValue(16),
+            paragraphLarger:  RFValue(16),
+            paragraph: RFValue(14),
             paragraphSmall:  RFValue(10),
             paragraphXSmall: RFValue(8),
         },
         borderRadius: RFValue(12),
-        myWidth: width.toFixed(0),
+        screenPadding: RFValue(16),
+        myWidth: Number(width.toFixed(0)),
         myHeight: height.toFixed(0),
     }
   };
