@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "moredev",
+    "slug": "moredev",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
