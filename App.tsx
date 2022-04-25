@@ -8,9 +8,13 @@ import {
   WorkSans_500Medium,
 } from "@expo-google-fonts/work-sans";
 import Routes from "./src/routes";
-import { View } from "react-native";
 import { ThemeProvider } from "styled-components";
-import {theme} from "./src/theme";
+import { theme } from "./src/theme";
+import {
+  initialWindowMetrics,
+  SafeAreaProvider,
+} from "react-native-safe-area-context";
+import { StatusBar } from "expo-status-bar";
 
 export default function App() {
   let [fontsLoaded] = useFonts({
@@ -25,7 +29,10 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme.dark}>
-      <Routes />
+      <StatusBar backgroundColor="red" />
+      <SafeAreaProvider>
+        <Routes />
+      </SafeAreaProvider>
     </ThemeProvider>
   );
 }

@@ -14,6 +14,9 @@ export default {
       background: "#F8F8F8",
       white: '#FFFF',
       gray: '#DBDBDB',
+      gray_medium: '#CCCCCC',
+      gray_dark: '#85868A',
+      background_card: '#ECE9FF',
     },
     fonts: {
       medium: "WorkSans_500Medium",

@@ -25,6 +25,7 @@ import IconCart from "../../assets/icons/iconCartHeader.svg";
 import Badge from "../../components/Badge";
 import Loading from "../../components/Loading";
 import Button from "../../components/Button";
+import useCart from "../../hooks/useCart";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Products">;
 
@@ -35,6 +36,7 @@ type ProductsType = {
   category: string;
   description: string;
   image: string;
+  amount?: number;
 };
 
 const Products = ({ navigation, route }: Props) => {
@@ -48,6 +50,8 @@ const Products = ({ navigation, route }: Props) => {
   const [categories, setCategories] = useState<string[]>(defaultCategories);
   const [selectedFilter, setSelectedFilter] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { list, addProductInCart, editItemQuantity } = useCart();
 
   const getCategories = async () => {
     const response = await api.get("/products/categories");
@@ -121,7 +125,7 @@ const Products = ({ navigation, route }: Props) => {
         <Title>Produtos</Title>
         <ContainerCart>
           <IconCart width={22} height={22} />
-          <Badge />
+          <Badge numberItemsInCart={list ? list.length : 0} />
         </ContainerCart>
       </Header>
       <FilterWrapper>
@@ -150,7 +154,12 @@ const Products = ({ navigation, route }: Props) => {
               ListHeaderComponent={renderNewProductsList}
               data={products}
               keyExtractor={(item) => String(item.id)}
-              renderItem={({ item }) => <ItemListProducts item={item} />}
+              renderItem={({ item }) => (
+                <ItemListProducts
+                  addProduct={(product) => addProductInCart(product)}
+                  item={item}
+                />
+              )}
               numColumns={2}
               showsVerticalScrollIndicator={false}
             />

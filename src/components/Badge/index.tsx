@@ -1,12 +1,15 @@
 import React from "react";
 import { Container, Title } from "./styles";
 
-const Badge = () => {
-
-  const itemInCart =  1220
+type Props = {
+  numberItemsInCart: number;
+};
+const Badge = ({ numberItemsInCart }: Props) => {
   return (
     <Container>
-      <Title>{itemInCart > 10 ? '+10' : itemInCart}</Title>
+      <Title>
+        {Number(numberItemsInCart) > 10 ? "+10" : numberItemsInCart}
+      </Title>
     </Container>
   );
 };

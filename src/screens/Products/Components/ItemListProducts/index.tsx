@@ -23,13 +23,18 @@ type ProductsType = {
   image: string;
 };
 
-const ItemProducts = ({ item }: { item: ProductsType }) => {
+type Props = {
+  item: ProductsType;
+  addProduct: (item: ProductsType) => void;
+};
+
+const ItemProducts = ({ item, addProduct }: Props) => {
   return (
     <Item>
       <ItemContainerImage style={shadows.primary}>
         <ItemImage source={{ uri: item.image }} resizeMode="contain" />
         <ItemFooterImage>
-          <ButtonAddProduct />
+          <ButtonAddProduct onPress={() => addProduct(item)} />
         </ItemFooterImage>
       </ItemContainerImage>
       <ItemDetails>
