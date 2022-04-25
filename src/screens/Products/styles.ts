@@ -8,20 +8,31 @@ export const Container = styled(SafeAreaView)`
   padding: ${({ theme }) => theme.sizes.screenPadding}px;
 `;
 
-export const Title = styled.Text``;
+export const Header = styled.View`
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+`;
+
+export const ContainerCart = styled.View`
+  height: 100%;
+`;
+
+export const Title = styled.Text`
+  font-size: ${({ theme }) => theme.sizes.fonts.h3}px;
+  font-family: ${({ theme }) => theme.fonts.semiBold};
+  color: ${({ theme }) => theme.colors.text_dark};
+`;
 
 export const Category = styled.Text`
-    font-size: ${({ theme }) => theme.sizes.fonts.h1}px;
-    font-family: ${({ theme }) => theme.fonts.semiBold};
-    color: ${({ theme }) => theme.colors.text_dark};
+  font-size: ${({ theme }) => theme.sizes.fonts.h1}px;
+  font-family: ${({ theme }) => theme.fonts.semiBold};
+  color: ${({ theme }) => theme.colors.text_dark};
 `;
-
 
 export const FilterWrapper = styled.View`
-  height: ${RFValue(80)}px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  justify-content: center;
 `;
-
 
 export const ListOfNewsProducts = styled.View`
   flex: 1;
@@ -32,7 +43,11 @@ export const ListOfProducts = styled.View`
 `;
 
 export const GoCard = styled.View`
-  height: ${RFValue(80)}px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  position: absolute;
+  bottom: 0;
+  width: ${({ theme }) => theme.sizes.myWidth}px;
+  background-color: ${({ theme }) => theme.colors.white};
+  padding: ${RFValue(29)}px;
+  border-top-left-radius: ${RFValue(10)}px;
+  border-top-right-radius: ${RFValue(10)}px;
 `;
-

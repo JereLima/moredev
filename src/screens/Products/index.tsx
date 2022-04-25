@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
+import { FlatList, ScrollView } from "react-native";
 
 import { RootStackParamList } from "../types";
+import { api } from "../../services/api";
+
 import {
   Container,
   Title,
+  ContainerCart,
   Category,
   FilterWrapper,
   ListOfProducts,
   ListOfNewsProducts,
   GoCard,
+  Header,
 } from "./styles";
-import { api } from "../../services/api";
-import { FlatList, ScrollView } from "react-native";
-import { shadows } from "../../theme/shadows";
-import NewProducts from "./Components/ItemNewProducts";
+
 import ItemListProducts from "./Components/ItemListProducts";
 import ItemNewProducts from "./Components/ItemNewProducts";
-import { Item } from "./Components/ItemNewProducts/styles";
 import ButtonFilter from "./Components/ButtonFilter";
+
+import IconCart from "../../assets/icons/iconCartHeader.svg";
+import Badge from "../../components/Badge";
+import Loading from "../../components/Loading";
+import Button from "../../components/Button";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Products">;
 
@@ -33,30 +39,63 @@ type ProductsType = {
 
 const Products = ({ navigation, route }: Props) => {
   const [products, setProducts] = useState<ProductsType[]>([]);
-  const [categories, setCategories] = useState<string[]>([]);
+  const defaultCategories = [
+    "electronics",
+    "jewelery",
+    "men's clothing",
+    "women's clothing",
+  ];
+  const [categories, setCategories] = useState<string[]>(defaultCategories);
+  const [selectedFilter, setSelectedFilter] = useState("");
   const [loading, setLoading] = useState(false);
 
   const getCategories = async () => {
     const response = await api.get("/products/categories");
     setCategories(response.data);
-    console.log(response.data);
     try {
     } catch (error) {
+      console.log("erro ao listar todos os produtos filtrados", error);
     } finally {
     }
   };
 
   const getAllProducts = async () => {
     setLoading(true);
+    setSelectedFilter("all");
     try {
       const response = await api.get("/products");
       setProducts(response.data);
     } catch (error) {
-      console.log(error);
+      console.log("erro ao listar todos os produtos", error);
     } finally {
       setLoading(false);
     }
   };
+
+  const getFilteredProducts = async (filter: string) => {
+    setLoading(true);
+    try {
+      const response = await api.get(`/products/category/${filter}`);
+      setProducts(response.data);
+    } catch (error) {
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSelectFilter = (filter: string) => {
+    setSelectedFilter(filter);
+  };
+
+  useEffect(() => {
+    if (selectedFilter === "all") return;
+    getFilteredProducts(selectedFilter);
+  }, [selectedFilter]);
+
+  useEffect(() => {
+    getAllProducts();
+    getCategories();
+  }, []);
 
   const renderNewProductsList = () => {
     return (
@@ -76,33 +115,52 @@ const Products = ({ navigation, route }: Props) => {
     );
   };
 
-  useEffect(() => {
-    getCategories();
-    getAllProducts();
-  }, []);
-
   return (
     <Container>
-      <Title>Produtos</Title>
+      <Header>
+        <Title>Produtos</Title>
+        <ContainerCart>
+          <IconCart width={22} height={22} />
+          <Badge />
+        </ContainerCart>
+      </Header>
       <FilterWrapper>
         <ScrollView horizontal>
-          <Title>Últimos</Title>
+          <ButtonFilter
+            isSelected={selectedFilter === "all" ? true : false}
+            title="Últimos"
+            onPress={getAllProducts}
+          />
           {categories.map((item, key) => (
-            <ButtonFilter/>
+            <ButtonFilter
+              key={item}
+              isSelected={item === selectedFilter ? true : false}
+              title={item}
+              onPress={() => handleSelectFilter(item)}
+            />
           ))}
         </ScrollView>
       </FilterWrapper>
-      <ListOfProducts>
-        <FlatList
-          ListHeaderComponent={renderNewProductsList}
-          data={products}
-          keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <ItemListProducts item={item} />}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-        />
-      </ListOfProducts>
-      <GoCard></GoCard>
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <ListOfProducts>
+            <FlatList
+              ListHeaderComponent={renderNewProductsList}
+              data={products}
+              keyExtractor={(item) => String(item.id)}
+              renderItem={({ item }) => <ItemListProducts item={item} />}
+              numColumns={2}
+              showsVerticalScrollIndicator={false}
+            />
+          </ListOfProducts>
+        </>
+      )}
+
+      <GoCard>
+        <Button onPress={() => navigation.navigate("Cart")} title="teste" />
+      </GoCard>
     </Container>
   );
 };

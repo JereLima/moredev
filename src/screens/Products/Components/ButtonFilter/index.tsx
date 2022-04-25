@@ -1,12 +1,15 @@
 import React from "react";
-import { View } from "react-native";
-
+import { ButtonProps } from "react-native";
 import { Container, Title } from "./styles";
+interface Props extends ButtonProps {
+  isSelected: boolean;
+  title: string;
+}
 
-const ButtonFilter = () => {
+const ButtonFilter = ({ isSelected, title, ...rest }: Props) => {
   return (
-    <Container>
-      <Title>teste</Title>
+    <Container isSelected={isSelected} {...rest}>
+      <Title isSelected={isSelected}>{title}</Title>
     </Container>
   );
 };

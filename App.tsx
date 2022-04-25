@@ -23,7 +23,6 @@ export default function App() {
     return <AppLoading />;
   }
 
-  //const themeActual = theme.colorsDark ? 
   return (
     <ThemeProvider theme={theme.dark}>
       <Routes />

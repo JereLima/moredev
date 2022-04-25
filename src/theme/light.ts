@@ -9,8 +9,11 @@ export default {
       secondary: "#504DB6",
       text: "#85868A",
       text_dark:'#000',
-      background: "#E5E5E5",
+      disabled: '#EBEBED',
+      disabled_text: '#B4B4B6',
+      background: "#F8F8F8",
       white: '#FFFF',
+      gray: '#DBDBDB',
     },
     fonts: {
       medium: "WorkSans_500Medium",
