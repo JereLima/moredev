@@ -24,7 +24,12 @@ type ProductsType = {
   image: string;
 };
 
-const ItemNewProducts = ({ item }: { item: ProductsType }) => {
+type Props = {
+  item: ProductsType;
+  addProduct: (item: ProductsType) => void;
+};
+
+const ItemNewProducts = ({ addProduct, item}: Props) => {
   return (
     <Item>
       <ItemContainerImage style={shadows.primary}>
@@ -36,7 +41,7 @@ const ItemNewProducts = ({ item }: { item: ProductsType }) => {
         <ItemDescription numberOfLines={2}>{item.description}</ItemDescription>
         <ItemFooter>
           <ItemPrice>${item.price}</ItemPrice>
-          <ButtonAddProduct />
+          <ButtonAddProduct onPress={() => addProduct(item)} />
         </ItemFooter>
       </ItemDetails>
     </Item>

@@ -20,7 +20,7 @@ export const Header = styled.View`
   justify-content: space-between;
 `;
 
-export const ContainerCart = styled.View`
+export const ContainerCart = styled.TouchableOpacity`
   height: 100%;
 `;
 

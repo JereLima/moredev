@@ -1,5 +1,6 @@
 import React from "react";
 import AppLoading from "expo-app-loading";
+import { Appearance } from 'react-native';
 
 import {
   useFonts,
@@ -27,8 +28,11 @@ export default function App() {
     return <AppLoading />;
   }
 
+  const colorScheme = Appearance.getColorScheme();
+  const applyTheme = colorScheme === 'dark' ? theme.dark : theme.light;
+
   return (
-    <ThemeProvider theme={theme.dark}>
+    <ThemeProvider theme={applyTheme}>
       <StatusBar backgroundColor="white" />
       <SafeAreaProvider>
         <Routes />

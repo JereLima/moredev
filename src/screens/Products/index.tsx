@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { NativeStackScreenProps } from "@react-navigation/native-stack";
-import { FlatList, ScrollView } from "react-native";
+import { Alert, FlatList, ScrollView } from "react-native";
 
 import { RootStackParamList } from "../types";
 import { api } from "../../services/api";
@@ -26,7 +26,7 @@ import IconCart from "../../assets/icons/iconCartHeader.svg";
 import Badge from "../../components/Badge";
 import Loading from "../../components/Loading";
 import Button from "../../components/Button";
-import {useStore } from "../../store/store";
+import { useStore } from "../../store/store";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Products">;
 
@@ -53,7 +53,7 @@ const Products = ({ navigation, route }: Props) => {
   const [loading, setLoading] = useState(false);
   const [badgeValue, setBadgeValue] = useState(0);
 
-  const { cart, addToCart, resetCart, updateItemCart } = useStore(
+  const { cart, addToCart, resetCart, incrementItemCart } = useStore(
     (state) => state
   );
 
@@ -92,6 +92,13 @@ const Products = ({ navigation, route }: Props) => {
   };
 
   const handleAddItemInCart = (item: ProductsType) => {
+    const findItem = cart.find((el) => el.id === item.id);
+    if (findItem) {
+      Alert.alert("Ops", "Produto já está no carrinho", [
+        { text: "Entendi", style: "destructive" },
+        { text: "ir para o carrinho", onPress: navigateFromCart },
+      ]);
+    }
     addToCart(item);
   };
 
@@ -100,6 +107,7 @@ const Products = ({ navigation, route }: Props) => {
   };
 
   const calcItemsInCart = () => {
+    console.log("alterou");
     const response = cart.reduce((ac, item: ProductsType) => {
       return ac + item.amount;
     }, 0);
@@ -107,8 +115,12 @@ const Products = ({ navigation, route }: Props) => {
     return response;
   };
 
+  const navigateFromCart = () => {
+    navigation.navigate("Cart");
+  };
+
   useEffect(() => {
-    calcItemsInCart();
+    calcItemsInCart;
   }, [cart]);
 
   useEffect(() => {
@@ -129,7 +141,12 @@ const Products = ({ navigation, route }: Props) => {
         <FlatList
           data={products}
           keyExtractor={(item) => String(item.id)}
-          renderItem={({ item }) => <ItemNewProducts item={item} />}
+          renderItem={({ item }) => (
+            <ItemNewProducts
+              item={item}
+              addProduct={(product) => handleAddItemInCart(product)}
+            />
+          )}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
         />
@@ -142,55 +159,55 @@ const Products = ({ navigation, route }: Props) => {
   return (
     <Container>
       <Content>
-      <Header>
-        <Title>Produtos</Title>
-        <ContainerCart>
-          <IconCart width={22} height={22} />
-          {badgeValue ? <Badge numberItemsInCart={badgeValue} /> : null}
-        </ContainerCart>
-      </Header>
-      <FilterWrapper>
-        <ScrollView horizontal>
-          <ButtonFilter
-            isSelected={selectedFilter === "all" ? true : false}
-            title="Últimos"
-            onPress={getAllProducts}
-          />
-          {categories.map((item, key) => (
+        <Header>
+          <Title>Produtos</Title>
+          <ContainerCart onPress={navigateFromCart}>
+            <IconCart width={22} height={22} />
+            {cart.length ? <Badge numberItemsInCart={cart.length} /> : null}
+          </ContainerCart>
+        </Header>
+        <FilterWrapper>
+          <ScrollView horizontal>
             <ButtonFilter
-              key={item}
-              isSelected={item === selectedFilter ? true : false}
-              title={item}
-              onPress={() => handleSelectFilter(item)}
+              isSelected={selectedFilter === "all" ? true : false}
+              title="Últimos"
+              onPress={getAllProducts}
             />
-          ))}
-        </ScrollView>
-      </FilterWrapper>
-      {loading ? (
-        <Loading />
-      ) : (
-        <>
-          <ListOfProducts>
-            <FlatList
-              ListHeaderComponent={renderNewProductsList}
-              data={products}
-              keyExtractor={(item) => String(item.id)}
-              renderItem={({ item }) => (
-                <ItemListProducts
-                  addProduct={(product) => handleAddItemInCart(product)}
-                  item={item}
-                />
-              )}
-              numColumns={2}
-              showsVerticalScrollIndicator={false}
-            />
-          </ListOfProducts>
-        </>
-      )}
+            {categories.map((item, key) => (
+              <ButtonFilter
+                key={item}
+                isSelected={item === selectedFilter ? true : false}
+                title={item}
+                onPress={() => handleSelectFilter(item)}
+              />
+            ))}
+          </ScrollView>
+        </FilterWrapper>
+        {loading ? (
+          <Loading />
+        ) : (
+          <>
+            <ListOfProducts>
+              <FlatList
+                ListHeaderComponent={renderNewProductsList}
+                data={products}
+                keyExtractor={(item) => String(item.id)}
+                renderItem={({ item }) => (
+                  <ItemListProducts
+                    addProduct={(product) => handleAddItemInCart(product)}
+                    item={item}
+                  />
+                )}
+                numColumns={2}
+                showsVerticalScrollIndicator={false}
+              />
+            </ListOfProducts>
+          </>
+        )}
       </Content>
       {cart.length ? (
         <GoCard>
-          <Button onPress={() => navigation.navigate("Cart")} title="IR PARA O CARRINHO" />
+          <Button onPress={navigateFromCart} title="IR PARA O CARRINHO" />
         </GoCard>
       ) : null}
     </Container>

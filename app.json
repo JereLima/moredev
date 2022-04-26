@@ -3,10 +3,16 @@
     "name": "moredev",
     "slug": "moredev",
     "version": "1.0.0",
+    "userInterfaceStyle": "automatic",
+    "orientation" : "portrait",
     "splash": {
       "image": "./assets/splash.png",
-      "backgroundColor": "8775FE",
+      "backgroundColor": "#8775FE",
       "resizeMode": "cover"
+    },
+    "android": {
+      "package": "com.moredev",
+      "versionCode": 1
     },
     "assetBundlePatterns": ["**/*"]
   }
