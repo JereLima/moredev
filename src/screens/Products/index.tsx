@@ -7,6 +7,7 @@ import { api } from "../../services/api";
 
 import {
   Container,
+  Content,
   Title,
   ContainerCart,
   Category,
@@ -25,7 +26,7 @@ import IconCart from "../../assets/icons/iconCartHeader.svg";
 import Badge from "../../components/Badge";
 import Loading from "../../components/Loading";
 import Button from "../../components/Button";
-import useCart from "../../hooks/useCart";
+import {useStore } from "../../store/store";
 
 type Props = NativeStackScreenProps<RootStackParamList, "Products">;
 
@@ -50,8 +51,11 @@ const Products = ({ navigation, route }: Props) => {
   const [categories, setCategories] = useState<string[]>(defaultCategories);
   const [selectedFilter, setSelectedFilter] = useState("");
   const [loading, setLoading] = useState(false);
+  const [badgeValue, setBadgeValue] = useState(0);
 
-  const { list, addProductInCart, editItemQuantity } = useCart();
+  const { cart, addToCart, resetCart, updateItemCart } = useStore(
+    (state) => state
+  );
 
   const getCategories = async () => {
     const response = await api.get("/products/categories");
@@ -87,9 +91,25 @@ const Products = ({ navigation, route }: Props) => {
     }
   };
 
+  const handleAddItemInCart = (item: ProductsType) => {
+    addToCart(item);
+  };
+
   const handleSelectFilter = (filter: string) => {
     setSelectedFilter(filter);
   };
+
+  const calcItemsInCart = () => {
+    const response = cart.reduce((ac, item: ProductsType) => {
+      return ac + item.amount;
+    }, 0);
+    setBadgeValue(response);
+    return response;
+  };
+
+  useEffect(() => {
+    calcItemsInCart();
+  }, [cart]);
 
   useEffect(() => {
     if (selectedFilter === "all") return;
@@ -121,11 +141,12 @@ const Products = ({ navigation, route }: Props) => {
 
   return (
     <Container>
+      <Content>
       <Header>
         <Title>Produtos</Title>
         <ContainerCart>
           <IconCart width={22} height={22} />
-          <Badge numberItemsInCart={list ? list.length : 0} />
+          {badgeValue ? <Badge numberItemsInCart={badgeValue} /> : null}
         </ContainerCart>
       </Header>
       <FilterWrapper>
@@ -156,7 +177,7 @@ const Products = ({ navigation, route }: Props) => {
               keyExtractor={(item) => String(item.id)}
               renderItem={({ item }) => (
                 <ItemListProducts
-                  addProduct={(product) => addProductInCart(product)}
+                  addProduct={(product) => handleAddItemInCart(product)}
                   item={item}
                 />
               )}
@@ -166,10 +187,12 @@ const Products = ({ navigation, route }: Props) => {
           </ListOfProducts>
         </>
       )}
-
-      <GoCard>
-        <Button onPress={() => navigation.navigate("Cart")} title="teste" />
-      </GoCard>
+      </Content>
+      {cart.length ? (
+        <GoCard>
+          <Button onPress={() => navigation.navigate("Cart")} title="IR PARA O CARRINHO" />
+        </GoCard>
+      ) : null}
     </Container>
   );
 };

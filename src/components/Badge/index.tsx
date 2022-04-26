@@ -8,7 +8,7 @@ const Badge = ({ numberItemsInCart }: Props) => {
   return (
     <Container>
       <Title>
-        {Number(numberItemsInCart) > 10 ? "+10" : numberItemsInCart}
+        {numberItemsInCart > 10 ? "+10" : numberItemsInCart}
       </Title>
     </Container>
   );

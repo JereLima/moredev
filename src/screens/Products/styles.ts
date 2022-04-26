@@ -5,8 +5,14 @@ import styled from "styled-components/native";
 export const Container = styled(SafeAreaView)`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
+`;
+
+export const Content = styled.View`
+  flex: 1;
+  background-color: ${({ theme }) => theme.colors.background};
   padding: ${({ theme }) => theme.sizes.screenPadding}px;
 `;
+
 
 export const Header = styled.View`
   flex-direction: row;
@@ -43,8 +49,6 @@ export const ListOfProducts = styled.View`
 `;
 
 export const GoCard = styled.View`
-  position: absolute;
-  bottom: 0;
   width: ${({ theme }) => theme.sizes.myWidth}px;
   background-color: ${({ theme }) => theme.colors.white};
   padding: ${RFValue(29)}px;

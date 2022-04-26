@@ -29,7 +29,7 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme.dark}>
-      <StatusBar backgroundColor="red" />
+      <StatusBar backgroundColor="white" />
       <SafeAreaProvider>
         <Routes />
       </SafeAreaProvider>

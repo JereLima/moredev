@@ -6,6 +6,7 @@ import { RootStackParamList } from "../screens/types";
 import IconHeader from "../assets/icons/iconCartHeader.svg";
 import { useTheme } from "styled-components";
 import { RFValue } from "react-native-responsive-fontsize";
+import SuccessfulPurchase from "../screens/SuccessfulPurchase";
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -29,6 +30,11 @@ const MyStack = () => {
           headerTitleStyle: {fontFamily: theme.fonts.bold, fontSize: RFValue(12)},
           headerStyle:{backgroundColor: theme.colors.background}
         }}
+      />
+      <Stack.Screen
+        name="SuccessfulPurchase"
+        component={SuccessfulPurchase}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
